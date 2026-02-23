@@ -18,6 +18,9 @@ from astropy import wcs
 from astropy.wcs import WCS
 from auxcodes import separator
 
+"""
+modify these paths to link to the macaroon and to the location of the extraction folder
+"""
 os.environ['RCLONE_CONFIG_DIR'] = './'
 os.environ['EXTRACTION_PATH'] = './'
 
