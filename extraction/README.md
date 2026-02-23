@@ -5,7 +5,8 @@ The script `run_extraction_and_selfcal.py` works both on single clusters, with c
  
 It needs to be ran inside `flocs v6.1.0` (https://public.spider.surfsara.nl/project/lofarvwf/fsweijen/containers/).
 
-It requires the definition of os.environ['RCLONE']
+It requires the definition of `os.environ['RCLONE_CONFIG_DIR']` and `os.environ['EXTRACTION_PATH']` to the location of the macaroon and to the `extraction` folder (where `run_extraction_and_selfcal.py` and `myextraction.py` are located)
+
 
 From the run directory, it will create subfolders with the CLUSTERNAMEs.
 
