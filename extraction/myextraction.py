@@ -123,8 +123,8 @@ for f in fields:
   os.chdir(fdir)
 
   # here add the de-compression of the antennas
-  MSs = sorted(glob.glob("L*_uv.uncorr_*.pre-cal.ms"))
-  for ms in MSs:
+  MSes = sorted(glob.glob("L*_uv.uncorr_*.pre-cal.ms"))
+  for ms in MSes:
     run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
 
   executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) #GDG: here add a parameter of chunckhours ????
