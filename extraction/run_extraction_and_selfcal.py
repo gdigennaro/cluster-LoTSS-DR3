@@ -18,7 +18,9 @@ from astropy import wcs
 from astropy.wcs import WCS
 from auxcodes import separator
 
-rclone = os.environ['RCLONE_CONFIG_DIR'] = './'
+os.environ['RCLONE_CONFIG_DIR'] = './'
+os.environ['EXTRACTION_PATH'] = './'
+
 
 from reprocessing_utils import *
 
@@ -81,7 +83,7 @@ for i, cluster in enumerate(clusterlist):
 
   if args['doextraction']:   
     if len(glob.glob(DATADIR+name+"/"+"P???+??*.dysco.sub.shift.avg.weights.ms.archive*")) == 0:
-      cmd = 'python ./myextraction.py %s %s %s %s'%(name,size,RA,DEC)
+      cmd = 'python '+os.environ['EXTRACTION_PATH']+'myextraction.py %s %s %s %s'%(name,size,RA,DEC)
       print (cmd)
       os.system(cmd)
     else:
