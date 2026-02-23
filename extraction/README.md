@@ -5,6 +5,8 @@ The script `run_extraction_and_selfcal.py` works both on single clusters, with c
  
 It needs to be ran inside `flocs v6.1.0` (https://public.spider.surfsara.nl/project/lofarvwf/fsweijen/containers/).
 
+It requires the definition of os.environ['RCLONE']
+
 From the run directory, it will create subfolders with the CLUSTERNAMEs.
 
 Examples of how to run the script, for a cluster list:
