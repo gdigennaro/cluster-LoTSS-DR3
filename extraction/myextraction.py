@@ -124,11 +124,13 @@ for f in fields:
 
   # here add the de-compression of the antennas
   MSes = sorted(glob.glob("L*_uv.uncorr_*.pre-cal.ms"))
-  if not os.path.isdir('./MScorr/'): os.mkdir('./MScorr/') 
+  ## if not os.path.isdir('./MScorr/'): os.mkdir('./MScorr/') ## verify if this is needed
   for ms in MSes:
-    run("DP3 msin="+ms+" msout=./MScorr/"+ms+" msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
-  os.chdir("./MScorr/")
-  executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) #GDG: here add a parameter of chunckhours ????
+    ## run("DP3 msin="+ms+" msout=./MScorr/"+ms+" msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
+    run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
+  ##os.chdir("./MScorr/")
+  ##executionstr = 'sub-sources-outside-region.py %s -b ../../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
+  executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
   run(executionstr,database=False)
 
 separator('Move subtracted datasets to working directory')
