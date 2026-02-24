@@ -73,23 +73,20 @@ separator('Getting pointing positions')
 r=requests.get('https://lofar-surveys.org/static/lotss_aladin/pointings_db.json')
 d=json.loads(r.text)
 
-if not args['fields']:
-  names=[]
-  ras=[]
-  decs=[]
-  for e in d:
-    if e[3]=='Done':
-      names.append(str(e[0]))
-      ras.append(e[1])
-      decs.append(e[2])
+names=[]
+ras=[]
+decs=[]
+for e in d:
+  if e[3]=='Done':
+    names.append(str(e[0]))
+    ras.append(e[1])
+    decs.append(e[2])
 
-  t=Table(data=[names,ras,decs],names=['Field','ra','dec'])
-  fsc=SkyCoord(t['ra']*u.deg,t['dec']*u.deg)
-  t['sep']=sc.separation(fsc)
+t=Table(data=[names,ras,decs],names=['Field','ra','dec'])
+fsc=SkyCoord(t['ra']*u.deg,t['dec']*u.deg)
+t['sep']=sc.separation(fsc)
 
-  fields=t[t['sep']<2.2*u.deg]
-else:
-  fields = args['fields']
+fields=t[t['sep']<2.2*u.deg]
 
 if len(fields)==0:
   die('No fields within 2.2 degrees of pointing position',database=False)
