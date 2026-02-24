@@ -48,6 +48,7 @@ parser.add_argument('-i','--clustername', help='cluster name, if you want to ext
 parser.add_argument('--RA', help='cluster RA (in deg)', required=False, type=float)
 parser.add_argument('--DEC', help='cluster DEC (in deg)', required=False, type=float)
 parser.add_argument('--size', help='size of box region (in deg)', default=0.4, required=False, type=float)
+parser.add_argument('--fields', nargs='+', help='For a single target, list of fields to download')
 parser.add_argument('-c','--catalog', help='Catalog to use from which extract clusters', required=False, type=str)
 
 args = vars(parser.parse_args())
