@@ -1,6 +1,6 @@
 The script `run_extraction_and_selfcal.py` works both on single clusters, with coordinates cluster name provided, and with a FITS table with a list of clusters; in this latter case, the table needs to have Name, RAJ2000, DEJ2000 columns). This is made of two independent steps:
 
-- the extraction, where the pointing is downloaded and sources outside a given region are subtracted. It requires a macaroon to connect to the LoTSS database (provided only on request to gabriella.digennaro@inaf.it)
+- the extraction, where the pointing is downloaded and sources outside a given region are subtracted. It requires a macaroon to connect to the LoTSS database (provided only on request by gabriella.digennaro@inaf.it)
 - the selfcal, performed using `facetselfcal v17.14` in auto mode (4 cycles of phase only and 6 cycles of amp+phase calibration). Possibly, you can add/decrease selfcal cycle by adding `--stop NCYCLES` to the `facetselfcal` command (see https://github.com/rvweeren/lofar_facet_selfcal/tree/main)
  
 It needs to be ran inside `flocs v6.1.0` (https://public.spider.surfsara.nl/project/lofarvwf/fsweijen/containers/).
@@ -8,7 +8,7 @@ It needs to be ran inside `flocs v6.1.0` (https://public.spider.surfsara.nl/proj
 It requires the definition of `os.environ['RCLONE_CONFIG_DIR']` and `os.environ['EXTRACTION_PATH']` to the location of the macaroon and to the `extraction` folder (where `run_extraction_and_selfcal.py` and `myextraction.py` are located)
 
 
-From the run directory, it will create subfolders with the CLUSTERNAMEs.
+From the run directory, it will create subfolder(s) with the CLUSTERNAME(s).
 
 Examples of how to run the script, for a cluster list:
 
