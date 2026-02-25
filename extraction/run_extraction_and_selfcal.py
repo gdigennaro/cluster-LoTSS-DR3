@@ -8,6 +8,7 @@ except ImportError:
     import lofar.bdsm as bdsm
 from crossmatch_utils import *
 import pyregion
+
 import time
 start_time = time.time()
 
@@ -18,11 +19,12 @@ from astropy import wcs
 from astropy.wcs import WCS
 from auxcodes import separator
 
+
 """
 modify these paths to link to the macaroon and to the location of the extraction folder
 """
-os.environ['RCLONE_CONFIG_DIR'] = './'
-os.environ['EXTRACTION_PATH'] = './'
+os.environ['RCLONE_CONFIG_DIR'] = '/iranet/groups/ulu/g.digennaro/software/'
+os.environ['EXTRACTION_PATH'] = '/iranet/groups/ulu/g.digennaro/software/cluster-LoTSS-DR3/extraction/'
 
 
 from reprocessing_utils import *
@@ -48,8 +50,9 @@ parser.add_argument('-i','--clustername', help='cluster name, if you want to ext
 parser.add_argument('--RA', help='cluster RA (in deg)', required=False, type=float)
 parser.add_argument('--DEC', help='cluster DEC (in deg)', required=False, type=float)
 parser.add_argument('--size', help='size of box region (in deg)', default=0.4, required=False, type=float)
-parser.add_argument('--fields', nargs='+', help='For a single target, list of fields to download')
+parser.add_argument('--fields', nargs='+', help='For a single target, list of fields to download', required=False)
 parser.add_argument('-c','--catalog', help='Catalog to use from which extract clusters', required=False, type=str)
+
 
 args = vars(parser.parse_args())
 
@@ -66,12 +69,15 @@ elif args['catalog'] and not args['clustername']:
 
 elif args['clustername'] and not args['catalog']:
   clusterlist = [args['clustername']]
-  ra         = [args['RA']]
-  dec        = [args['DEC']]
-
+  try:
+    ra         = [args['RA']]
+    dec        = [args['DEC']]
+  except:
+    ra, dec = [None], [None]
 else:
   print ("Error: give a single target name or a cluster catalog.")
   sys.exit()
+
 
 for i, cluster in enumerate(clusterlist):
   print (os.getcwd())
@@ -89,7 +95,7 @@ for i, cluster in enumerate(clusterlist):
     if len(glob.glob(DATADIR+name+"/"+"P???+??*.dysco.sub.shift.avg.weights.ms.archive*")) == 0:
       #cmd = 'python '+os.environ['EXTRACTION_PATH']+'/myextraction.py %s %s %s %s'%(name,size,RA,DEC)
       try: #if len(args['fields']) > 0:
-        cmd = 'python '+os.environ['EXTRACTION_PATH']+'/myextraction.py -i %s --size %s --RA %s --DEC %s --fields %s'%(name,size,RA,DEC,args['fields'])
+        cmd = 'python '+os.environ['EXTRACTION_PATH']+'/myextraction.py -i %s --size %s --RA %s --DEC %s --fields %s'%(name,size,RA,DEC," ".join(map(str,args['fields'])))
       except: #else:
          cmd = 'python '+os.environ['EXTRACTION_PATH']+'/myextraction.py -i %s --size %s --RA %s --DEC %s'%(name,size,RA,DEC)
       print (cmd)
