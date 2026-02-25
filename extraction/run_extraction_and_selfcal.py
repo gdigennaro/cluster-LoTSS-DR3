@@ -23,8 +23,8 @@ from auxcodes import separator
 """
 modify these paths to link to the macaroon and to the location of the extraction folder
 """
-os.environ['RCLONE_CONFIG_DIR'] = '/iranet/groups/ulu/g.digennaro/software/'
-os.environ['EXTRACTION_PATH'] = '/iranet/groups/ulu/g.digennaro/software/cluster-LoTSS-DR3/extraction/'
+os.environ['RCLONE_CONFIG_DIR'] = './'
+os.environ['EXTRACTION_PATH'] = './'
 
 
 from reprocessing_utils import *
