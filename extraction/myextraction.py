@@ -3,12 +3,14 @@
 """
 Manual extraction
 Modified to be able to run without issues on makeDirArrColumn() called on a AntennaPairStMan
+It also allows to download selected fields (and not all the fields) that cover a cluster
 
 G. Di Gennaro
 Feb 2026
 """
 
 from __future__ import print_function
+import argparse
 import sys
 from run_extraction_pipeline import create_ds9_region,do_run_extract
 from reprocessing_utils import prepare_field
@@ -32,7 +34,6 @@ parser.add_argument('--RA', help='cluster RA (in deg)', required=False, type=flo
 parser.add_argument('--DEC', help='cluster DEC (in deg)', required=False, type=float)
 parser.add_argument('--size', help='size of box region (in deg)', default=0.4, required=True, type=float)
 parser.add_argument('--fields', nargs='+', help='List of fields to download.')
-
 args = vars(parser.parse_args())
 
 #if len(sys.argv)==1:
@@ -40,9 +41,9 @@ args = vars(parser.parse_args())
 
 separator('Finding target name and position')
 
-subtractoptions=''
-while sys.argv[1][0]=='-':
-  subtractoptions+=' '+sys.argv.pop(1)
+#subtractoptions=''
+#while sys.argv[1][0]=='-':
+#  subtractoptions+=' '+sys.argv.pop(1)
 
 target=args['clustername']#sys.argv[1]
 try:
@@ -58,7 +59,8 @@ try:
 except:
     pass
 
-print('Inputs to extraction. Size %s, RA %s, Dec %s, Name %s, subtract options %s'%(size,ra,dec,target,subtractoptions))
+#print('Inputs to extraction. Size %s, RA %s, Dec %s, Name %s, subtract options %s'%(size,ra,dec,target,subtractoptions))
+print('Inputs to extraction. Size %s, RA %s, Dec %s, Name %s'%(size,ra,dec,target))
 
 if ra is None:
   if 'ILTJ' in target:
@@ -117,7 +119,11 @@ create_ds9_region('%s.ds9.reg'%(target),ra,dec,size) # this needs to be modified
 separator('Downloading field data')
 
 for f in fields:
-  field=f['Field']
+  try:
+    field=f['Field']
+  except:
+    field = f
+
   report('Doing field '+field)
   fdir=startdir+'/'+target+'/'+field
   if os.path.isdir(fdir):
@@ -135,12 +141,14 @@ for f in fields:
   os.chdir(fdir)
 
   # here add the de-compression of the antennas
-  MSes = sorted(glob.glob("L*MHz_uv*pre-cal.ms"))
   MSes = sorted(glob.glob("L*_uv.uncorr_*.pre-cal.ms"))
-
+  if not os.path.isdir('./MScorr/'): os.mkdir('./MScorr/') ## verify if this is needed
   for ms in MSes:
-    run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=False msout.antennacompression=False steps=[]")
-  executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
+    run("DP3 msin="+ms+" msout=./MScorr/"+ms+" msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
+    #run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=False msout.antennacompression=False steps=[]")
+  os.chdir("./MScorr/")
+  executionstr = 'sub-sources-outside-region.py %s -b ../../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
+  #executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
   run(executionstr,database=False)
 
 separator('Move subtracted datasets to working directory')
