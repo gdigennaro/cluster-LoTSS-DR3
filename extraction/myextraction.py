@@ -123,7 +123,6 @@ for f in fields:
     field=f['Field']
   except:
     field = f
-
   report('Doing field '+field)
   fdir=startdir+'/'+target+'/'+field
   if os.path.isdir(fdir):
@@ -140,7 +139,6 @@ for f in fields:
     field=f['Field']
   except:
     field = f
-  
   fdir=startdir+'/'+target+'/'+field
   os.chdir(fdir)
 
@@ -151,6 +149,14 @@ for f in fields:
     run("DP3 msin="+ms+" msout=./MScorr/"+ms+" msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
     #run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=False msout.antennacompression=False steps=[]")
   os.chdir("./MScorr/")
+  os.system("mv ../image_full_ampphase_di_m.NS.DicoModel .")
+  os.system("mv ../image_full_ampphase_di_m.NS.mask01.fits .")
+  os.system("mv ../image_dirin_SSD_m.npy.ClusterCat.npy .")
+  os.system("mv ../SOLSDIR .")
+  os.system("mv ../DDS3_full*smoothed.npz .")
+  os.system("mv ../DDS3_full_slow*.npz .") 
+  os.system("mv ../summary.txt .") 
+  
   executionstr = 'sub-sources-outside-region.py %s -b ../../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
   #executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
   run(executionstr,database=False)
