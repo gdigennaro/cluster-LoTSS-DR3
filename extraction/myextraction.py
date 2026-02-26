@@ -136,7 +136,11 @@ for f in fields:
 separator('Running subtraction')
 
 for f in fields:
-  field=f['Field']
+  try:
+    field=f['Field']
+  except:
+    field = f
+  
   fdir=startdir+'/'+target+'/'+field
   os.chdir(fdir)
 
