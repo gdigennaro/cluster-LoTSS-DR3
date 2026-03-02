@@ -41,25 +41,20 @@ args = vars(parser.parse_args())
 
 separator('Finding target name and position')
 
-#subtractoptions=''
-#while sys.argv[1][0]=='-':
-#  subtractoptions+=' '+sys.argv.pop(1)
-
-target=args['clustername']#sys.argv[1]
+target=args['clustername']
 try:
-  size=float(args['size'])#sys.argv[2])
+  size=float(args['size']))
 except:
   size=0.5
 
 ra=None
 dec=None
 try:
-  ra=float(args['RA'])#sys.argv[3])
-  dec=float(args['DEC'])#sys.argv[4])
+  ra=float(args['RA']))
+  dec=float(args['DEC']))
 except:
     pass
 
-#print('Inputs to extraction. Size %s, RA %s, Dec %s, Name %s, subtract options %s'%(size,ra,dec,target,subtractoptions))
 print('Inputs to extraction. Size %s, RA %s, Dec %s, Name %s'%(size,ra,dec,target))
 
 if ra is None:
@@ -141,24 +136,8 @@ for f in fields:
     field = f
   fdir=startdir+'/'+target+'/'+field
   os.chdir(fdir)
-
-  # here add the de-compression of the antennas
-  MSes = sorted(glob.glob("L*_uv.uncorr_*.pre-cal.ms"))
-  if not os.path.isdir('./MScorr/'): os.mkdir('./MScorr/') ## verify if this is needed
-  for ms in MSes:
-    run("DP3 msin="+ms+" msout=./MScorr/"+ms+" msout.storagemanager=dysco msout.uvwcompression=false msout.antennacompression=False steps=[]")
-    #run("DP3 msin="+ms+" msout=. msout.storagemanager=dysco msout.uvwcompression=False msout.antennacompression=False steps=[]")
-  os.chdir("./MScorr/")
-  os.system("mv ../image_full_ampphase_di_m.NS.DicoModel .")
-  os.system("mv ../image_full_ampphase_di_m.NS.mask01.fits .")
-  os.system("mv ../image_dirin_SSD_m.npy.ClusterCat.npy .")
-  os.system("mv ../SOLSDIR .")
-  os.system("mv ../DDS3_full*smoothed.npz .")
-  os.system("mv ../DDS3_full_slow*.npz .") 
-  os.system("mv ../summary.txt .") 
   
-  executionstr = 'sub-sources-outside-region.py %s -b ../../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
-  #executionstr = 'sub-sources-outside-region.py %s -b ../%s.ds9.reg -p %s'%(subtractoptions,target,target) 
+  executionstr = 'python '+os.environ['EXTRACTION_PATH']+'/sub-sources-outside-region.py -b ../%s.ds9.reg -p %s'%(target,target) 
   run(executionstr,database=False)
 
 separator('Move subtracted datasets to working directory')
