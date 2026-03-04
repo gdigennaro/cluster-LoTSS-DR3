@@ -43,15 +43,15 @@ separator('Finding target name and position')
 
 target=args['clustername']
 try:
-  size=float(args['size']))
+  size=float(args['size'])
 except:
   size=0.5
 
 ra=None
 dec=None
 try:
-  ra=float(args['RA']))
-  dec=float(args['DEC']))
+  ra=float(args['RA'])
+  dec=float(args['DEC'])
 except:
     pass
 
