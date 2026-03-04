@@ -29,12 +29,6 @@ os.environ['EXTRACTION_PATH'] = './'
 
 from reprocessing_utils import *
 
-"""
-Script to run extraction and automatic selfcal from LoTSS poining.
-
-to run inside flocs v6.1.0
-"""
-
 DATADIR = './'
 
 def upload_extract(cname,uploadfilename):
