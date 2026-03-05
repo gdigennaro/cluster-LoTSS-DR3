@@ -109,7 +109,7 @@ for i, cluster in enumerate(clusterlist):
       os.chdir(CLUSTERDIR)
       print (os.getcwd())
       
-      cmd  = 'python facetselfcal '
+      cmd  = 'facetselfcal '
       cmd += '-b %s.ds9.reg '%name
       cmd += '--auto '  
       cmd += '-i %s *dysco.sub.shift.avg.weights.ms.archive?'%name
