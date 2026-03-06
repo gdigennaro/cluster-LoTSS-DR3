@@ -2,14 +2,6 @@
 from __future__ import print_function
 import casacore.tables as pt
 import os,sys
-
-sys.path.remove('/opt/lofar/ddf-pipeline/utils')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline/utils")
-sys.path.remove('/opt/lofar/lotss-hba-survey')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/lotss-hba-survey")
-sys.path.remove('/opt/lofar/ddf-pipeline/scripts')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline//scripts")
-
 import ast
 import numpy as np
 import argparse
