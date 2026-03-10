@@ -3,12 +3,12 @@ from __future__ import print_function
 import casacore.tables as pt
 import os,sys
 
-sys.path.remove('/opt/lofar/ddf-pipeline/utils')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline/utils")
-sys.path.remove('/opt/lofar/lotss-hba-survey')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/lotss-hba-survey")
-sys.path.remove('/opt/lofar/ddf-pipeline/scripts')
-sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline//scripts")
+#sys.path.remove('/opt/lofar/ddf-pipeline/utils')
+#sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline/utils")
+#sys.path.remove('/opt/lofar/lotss-hba-survey')
+#sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/lotss-hba-survey")
+#sys.path.remove('/opt/lofar/ddf-pipeline/scripts')
+#sys.path.insert(1, "/iranet/groups/ulu/g.digennaro/software/extractionDR3/ddf-pipeline//scripts")
 
 
 import ast
@@ -23,7 +23,9 @@ from subprocess import call
 from fixsymlinks import fixsymlinks
 from auxcodes import die,report,warn,run,flatten
 from pipeline import parse_parset
-from reprocessing_utils import *
+#from reprocessing_utils import *
+from parset import option_list
+from options import options,print_options
 import datetime
 
 try:
@@ -40,6 +42,46 @@ def arg_as_list(s):
     if type(v) is not list:                                                    
         raise argparse.ArgumentTypeError("Argument \"%s\" is not a list" % (s))
     return v  
+
+def convert_summary_cfg(option_list,summaryname='summary.txt',newconfigname='tier1-reprocessing.cfg'):
+    summary = open(summaryname,'r')
+    summary_dict = {}
+    print('Summary of the reprocessing pipeline inputs from summary.txt')
+    for line in summary:
+        line = line.replace(" ", "")
+        line = line.strip().split(':')
+        if len(line) != 2:
+            continue
+        summary_dict[line[0]] = line[1]
+        
+    newconfig = open(newconfigname,'w')
+    option_types = []
+    for option in option_list:
+        if option[0] not in option_types:
+            option_types.append(option[0])
+          
+    for option_type in option_types:
+        newconfig.write('[%s]\n'%option_type)
+        for option in option_list:
+            if option[0] != option_type:
+                continue
+            try:
+                summary_value = summary_dict[option[1]]
+            except KeyError:
+                try:
+                    summary_value = summary_dict[option[0]+'_'+option[1]]
+                except KeyError:
+                    print('Cannot find option for parameter',option[0],option[1])
+                    continue
+            if summary_value == 'None':
+                continue
+            print(option,summary_value)
+            newconfig.write('%s=%s\n'%(option[1],summary_value))
+    newconfig.close()
+
+    o = options(newconfigname,option_list)
+    return o
+
 
 def gethistorykey(image, searchkey):
     hdul = fits.open(image)
