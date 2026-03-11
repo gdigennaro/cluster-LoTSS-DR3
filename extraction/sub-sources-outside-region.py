@@ -27,6 +27,7 @@ from pipeline import parse_parset
 from parset import option_list
 from options import options,print_options
 import datetime
+import time
 
 try:
   from getcpus import getcpus
@@ -475,6 +476,23 @@ def SummaryToVersion(summaryFile):
             iLine+=1
             
     return DOut
+
+def striparchivename(workdir='.'):
+  mslist = glob.glob(workdir+'/L*.ms.archive')
+  for ms in mslist:
+      outname = ms.rstrip('.archive')
+      if os.path.exists(outname):
+          if os.path.islink(outname):
+              print ('Link to',outname,'already exists')
+              continue
+          else:
+              raise RuntimeError(ms+' and '+outname+' both exist in the directory!')
+      cmd = 'ln -s ' + ms + ' ' + outname
+      print(cmd)
+      os.system(cmd)
+
+  return
+
 
 parser = argparse.ArgumentParser(description='Keep soures inside box region, subtract everything else and create new ms')
 parser.add_argument('-b','--boxfile', help='boxfile, required argument', required=True, type=str)
