@@ -94,7 +94,7 @@ for i, cluster in enumerate(clusterlist):
          cmd = 'python '+os.environ['EXTRACTION_PATH']+'/myextraction.py -i %s --size %s --RA %s --DEC %s'%(name,size,RA,DEC)
       print (cmd)
       os.system(cmd)
-			os.system('tar -zcf extractedMS.tar.gz *.dysco.sub.shift.avg.weights.ms.archive?') #save the original source-subtracted MSes
+	  os.system('tar -zcf extractedMS.tar.gz *.dysco.sub.shift.avg.weights.ms.archive?') #save the original source-subtracted MSes
     else:
       print ("Extraction already done")
      
@@ -113,7 +113,7 @@ for i, cluster in enumerate(clusterlist):
       cmd  = 'python '+os.environ['EXTRACTION_PATH']+'/lofar_facet_selfcal/facetselfcal.py '
       cmd += '-b %s.ds9.reg '%name
       cmd += '--auto '  
-			cmd += '--metadata-compression False '
+	  cmd += '--metadata-compression False '
       cmd += '-i %s *dysco.sub.shift.avg.weights.ms.archive?'%name
       
       print (cmd)
