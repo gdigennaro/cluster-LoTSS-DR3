@@ -109,7 +109,9 @@ startdir = os.getcwd()
 if not os.path.isdir(target):
   os.mkdir(target)
 os.chdir(target)
-create_ds9_region('%s.ds9.reg'%(target),ra,dec,size) # this needs to be modified for a more intelligent DS9 region based on flux
+
+if not os.path.exists('%s.reg'%(target)): # in this way, if we want to reprocess with a different box it does not create it
+  create_ds9_region('%s.ds9.reg'%(target),ra,dec,size) # this needs to be modified for a more intelligent DS9 region based on flux  
 
 separator('Downloading field data')
 
